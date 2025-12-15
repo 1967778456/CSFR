@@ -12,6 +12,17 @@ __all__ = [
 ]
 
 
+def freq_energy_fft(x: torch.Tensor) -> torch.Tensor:
+    fft = torch.fft.rfft2(x, norm="ortho")
+    energy = torch.abs(fft).mean(dim=1, keepdim=True)
+    energy = F.interpolate(
+        energy,
+        size=x.shape[-2:],
+        mode="bilinear",
+        align_corners=False
+    )
+    return energy
+
 # --------------------------------------------------
 # 局部信息熵（空间域）
 # --------------------------------------------------
